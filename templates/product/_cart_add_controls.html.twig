@@ -1,0 +1,49 @@
+{{ form_start(addToCartForm, {
+    attr: { class: 'cart-add-controls d-flex align-items-center justify-content-baseline' }
+}) }}
+
+
+    {% if addToCartForm.color is defined %}
+        <div
+        {{ stimulus_controller('color-square',{
+            colorId: addToCartForm.vars.data.product.colors[0].id
+        }) }}
+        >
+{#            stimulus_target('color-square','selectColor-target')#}
+
+       {{form_widget(addToCartForm.color,{attr: {"data-color-square-target":"selectColor"}})  }}
+
+            {% for color in addToCartForm.vars.data.product.colors %}
+                <button
+                        type="button"
+                        data-id-color="{{ color.id }}"
+                        {{ stimulus_target('color-square','squareColor') }}
+                        {{ stimulus_action('color-square','changeColor','click') }}
+                        class="color-square"
+                        style="background-color: rgb({{ color.red }}, {{ color.green }}, {{ color.blue }});"
+                ></button>
+            {% endfor %}
+
+{#            {% for choice in addToCartForm.color.vars.choices  %}#}
+{#                <span class="color-square" style="background-color: #{{ choice.data.hexColor }}"></span>#}
+{#            {% endfor %}#}
+        </div>
+
+    {% endif %}
+
+    {{ form_widget(addToCartForm.quantity, {
+        attr: { class: 'mx-3' }
+    }) }}
+
+    <button class="btn btn-info btn-sm" formnovalidate>
+        +
+    </button>
+{{ form_end(addToCartForm) }}
+
+<div>
+    {{ form_errors(addToCartForm) }}
+    {% if addToCartForm.color is defined %}
+        {{ form_errors(addToCartForm.color) }}
+    {% endif %}
+    {{ form_errors(addToCartForm.quantity) }}
+</div>
