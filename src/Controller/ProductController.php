@@ -18,14 +18,23 @@ class ProductController extends AbstractController
      * @Route("/", name="app_homepage")
      * @Route("/category/{id}", name="app_category")
      */
-    public function index(Request $request, CategoryRepository $categoryRepository, ProductRepository $productRepository, Category $category = null): Response
+    public function index(Request $request,
+                          CategoryRepository $categoryRepository,
+                          ProductRepository $productRepository,
+                          Category $category = null): Response
     {
+       //dd($category);
         $searchTerm = $request->query->get('q');
         $products = $productRepository->search(
             $category,
             $searchTerm
         );
 
+        if($request->query->get('preview') === '1'){
+            return $this->render('product/_searchPreview.html.twig',[
+                'products' => $products
+            ]);
+        }
         return $this->render('product/index.html.twig', [
             'currentCategory' => $category,
             'categories' => $categoryRepository->findAll(),

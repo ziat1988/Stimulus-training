@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
     <div class="container-fluid mt-4">
         <div class="row">
             <aside class="col-xs-12 col-3">
@@ -19,15 +20,22 @@
                         </h1>
                     </div>
                     <div class="col-9">
-                        <form>
-                            <div class="input-group">
+                        <form >
+                            <div class="input-group" {{ stimulus_controller('search-preview',{url: app.request.uri}) }}>
                                 <input
-                                    name="q"
-                                    value="{{ searchTerm }}"
-                                    placeholder="Search products..."
-                                    type="search"
-                                    class="form-control"
+                                        {{ stimulus_action('search-preview', 'onChangeInput') }}
+                                        name="q"
+                                        value="{{ searchTerm }}"
+                                        placeholder="Search products..."
+                                        type="search"
+                                        class="form-control"
+                                        autocomplete="off"
                                 >
+
+                                <div
+                                        class="search-preview"
+                                        {{ stimulus_target('search-preview','result') }}
+                                ></div>
                             </div>
                         </form>
                     </div>
@@ -39,9 +47,9 @@
                                 <div class="product-image">
                                     <a href="{{ path('app_product', { id: product.id }) }}">
                                         <img
-                                            alt="{{ product.name }}"
-                                            src="{{ asset('/uploads/products/'~product.imageFilename) }}"
-                                            class="d-block mb-2"
+                                                alt="{{ product.name }}"
+                                                src="{{ asset('/uploads/products/'~product.imageFilename) }}"
+                                                class="d-block mb-2"
                                         >
                                     </a>
                                     <h3 class="font-weight-bold mb-2 px-2">
@@ -51,7 +59,7 @@
                                     </h3>
                                 </div>
                                 <div
-                                    class="p-2 my-3 d-md-flex justify-content-between">
+                                        class="p-2 my-3 d-md-flex justify-content-between">
                                     <p class="p-0 d-inline">
                                         <strong>{{ product.priceString|format_currency('USD') }}</strong>
                                     </p>
