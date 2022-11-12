@@ -6,11 +6,9 @@
     {% if addToCartForm.color is defined %}
         <div
         {{ stimulus_controller('color-square',{
-            colorId: addToCartForm.vars.data.product.colors[0].id
+            colorId: addToCartForm.vars.data.product.colors[2].id
         }) }}
         >
-{#            stimulus_target('color-square','selectColor-target')#}
-
        {{form_widget(addToCartForm.color,{attr: {"data-color-square-target":"selectColor"}})  }}
 
             {% for color in addToCartForm.vars.data.product.colors %}
@@ -24,9 +22,6 @@
                 ></button>
             {% endfor %}
 
-{#            {% for choice in addToCartForm.color.vars.choices  %}#}
-{#                <span class="color-square" style="background-color: #{{ choice.data.hexColor }}"></span>#}
-{#            {% endfor %}#}
         </div>
 
     {% endif %}
