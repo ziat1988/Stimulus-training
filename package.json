@@ -6,6 +6,7 @@
         "bootstrap": "^5.2.2",
         "core-js": "^3.0.0",
         "regenerator-runtime": "^0.13.2",
+        "sweetalert2": "^11.6.8",
         "webpack-notifier": "^1.6.0"
     },
     "license": "UNLICENSED",

@@ -8,11 +8,9 @@ export default class extends Controller
     }
     connect() {
         super.connect();
-        console.log('first time:', this.colorIdValue)
     }
 
     colorIdValueChanged(){
-        console.log('color change')
         this.selectColorTarget.value= this.colorIdValue
         this.squareColorTargets.forEach(el=>{
             if(+el.dataset.idColor !== this.colorIdValue ){
