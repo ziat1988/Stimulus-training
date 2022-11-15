@@ -7,6 +7,7 @@
         "core-js": "^3.0.0",
         "regenerator-runtime": "^0.13.2",
         "sweetalert2": "^11.6.8",
+        "webpack-bundle-analyzer": "^4.7.0",
         "webpack-notifier": "^1.6.0"
     },
     "license": "UNLICENSED",
