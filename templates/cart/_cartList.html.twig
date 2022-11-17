@@ -14,8 +14,7 @@
     {% for item in cart.items %}
         <div
                 class="cart-item row p-3"
-{#                data-action="submit-confirm:async:submitted->cart-list#removeItem"#}
-                {{ stimulus_action('cart-list','removeItem','submit-confirm:async:submitted') }}
+
         >
             <div class="col-2">
                 {{ item.product.name }}
