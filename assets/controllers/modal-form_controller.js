@@ -1,8 +1,11 @@
 import {Controller} from "@hotwired/stimulus";
+import {useDispatch} from "stimulus-use";
 import {Modal} from "bootstrap";
 import axios from "axios";
+
 export default class extends Controller
 {
+    modal = null;
     static targets = ['modal','modalBody']
     static values = {
         url: String,
@@ -10,16 +13,28 @@ export default class extends Controller
     }
     connect() {
         super.connect();
+        useDispatch(this,{debug:true});
     }
 
     async submitForm(e){
         e.preventDefault();
         const form = this.modalBodyTarget.getElementsByTagName('form')[0];
 
-        const response = await axios.post(`${this.urlValue}`,form,{
-            headers: {'X-Requested-With': 'XMLHttpRequest'}
-        })
-        this.modalBodyTarget.innerHTML = await response.data;
+        try{
+            const response = await axios.post(`${this.urlValue}`,form,{
+                headers: {'X-Requested-With': 'XMLHttpRequest'}
+            })
+
+            // close modal & dispatch event
+            this.modal.hide();
+            this.dispatch('success')
+
+        }catch (e){
+            console.error(e);
+            this.modalBodyTarget.innerHTML = e.response.data;
+        }
+
+       // this.modalBodyTarget.innerHTML = await response.data;
         /*
         const response = await fetch(`${this.urlValue}`,{
             method: form.getAttribute('method'),
@@ -31,6 +46,7 @@ export default class extends Controller
          */
 
     }
+
     async openModal(e){
         // clear form first
         this.modalBodyTarget.innerHTML = '';
@@ -56,8 +72,9 @@ export default class extends Controller
             return;
         }
 
-        const modal = new Modal(this.modalTarget);
-        modal.show();
+        this.modal = new Modal(this.modalTarget);
+        this.modal.show();
+
 
     }
 }

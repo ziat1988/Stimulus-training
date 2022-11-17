@@ -18,9 +18,11 @@ class ProductAdminController extends AbstractController
     /**
      * @Route("/", name="product_admin_index", methods={"GET"})
      */
-    public function index(ProductRepository $productRepository): Response
+    public function index(ProductRepository $productRepository, Request $request): Response
     {
-        return $this->render('product_admin/index.html.twig', [
+        $template = $request->isXmlHttpRequest() ? '_list_product.html.twig' : 'index.html.twig';
+
+        return $this->render('product_admin/'.$template, [
             'products' => $productRepository->findAll(),
         ]);
     }
@@ -37,10 +39,13 @@ class ProductAdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($product);
-          //  $entityManager->flush();
+            $entityManager->flush();
 
-            dd('go here');
-            //return $this->redirectToRoute('product_admin_index');
+            if($request->isXmlHttpRequest()){
+                return new Response(null, 204);
+            }
+
+            return $this->redirectToRoute('product_admin_index');
         }
 
 
@@ -49,7 +54,7 @@ class ProductAdminController extends AbstractController
         return $this->render('product_admin/' . $template, [
             'product' => $product,
             'form' => $form->createView(),
-        ]);
+        ], new Response(null,$form->isSubmitted() && !$form->isValid()? 422 : 200));
 
     }
 
