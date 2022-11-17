@@ -23,7 +23,6 @@ class ProductController extends AbstractController
                           ProductRepository $productRepository,
                           Category $category = null): Response
     {
-       //dd($category);
         $searchTerm = $request->query->get('q');
         $products = $productRepository->search(
             $category,

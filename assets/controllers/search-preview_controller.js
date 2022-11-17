@@ -1,5 +1,5 @@
 import {Controller} from "@hotwired/stimulus";
-import {useDebounce,useClickOutside } from "stimulus-use";
+import {useDebounce,useClickOutside, useTransition } from "stimulus-use";
 
 export default class extends Controller
 {
@@ -20,14 +20,31 @@ export default class extends Controller
         super.connect();
         useDebounce(this)
         useClickOutside(this)
+        useTransition(this, {
+            element: this.resultTarget,
+            enterActive: 'fade-enter-active',
+            enterFrom: 'fade-enter-from',
+            enterTo: 'fade-enter-to',
+            leaveActive: 'fade-leave-active',
+            leaveFrom: 'fade-leave-from',
+            leaveTo: 'fade-leave-to',
+            hiddenClass: 'd-none',
+        });
 
     }
     clickOutside(event) {
-        this.resultTarget.innerHTML = '';
+        //this.resultTarget.innerHTML = '';
+        this.leave();
     }
 
     onChangeInput(e){
-        this.search(e.currentTarget.value)
+        const text = e.currentTarget.value.trim();
+        console.log('text o day:',text)
+        if(text === ''){
+            this.leave();
+            return;
+        }
+        this.search(text)
     }
 
     async search(txt){
@@ -38,6 +55,7 @@ export default class extends Controller
 
         const response = await fetch(`${this.urlValue}?${params.toString()}`);
         this.resultTarget.innerHTML = await response.text();
+        this.enter()
     }
 
 }
